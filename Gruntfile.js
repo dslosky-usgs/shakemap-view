@@ -7,70 +7,82 @@ module.exports = function (grunt) {
   gruntConfig.tasks.forEach(grunt.loadNpmTasks);
   grunt.initConfig(gruntConfig);
 
-  /**
-   * Checks whether or not a task has run yet in the current grunt runtime.
-   *
-   * @param task {String} The name of the task to check.
-   *
-   * @return True if the task has not yet run, false if the task has already
-   *         run in this grunt runtime.
-   */
-  var taskNotRun = function (task) {
-    try {
-      grunt.task.requires(task);
-      return false; // Task has already run
-    } catch (e) {
-      return true; // Task has not yet run
-    }
-  };
+  grunt.event.on('watch', function (action, filepath) {
+    // Only lint the file that actually changed
+    grunt.config(['eslint', 'scripts'], filepath);
+  });
 
-  /**
-   * Creates a task function that executes a configurable list of tasks that
-   * have not yet run in the current grunt runtime.
-   *
-   * @param tasks {Array} An array of task names to potentially run.
-   */
-  var taskList = function (tasks) {
-    return function () {
-      var t = tasks.filter(taskNotRun);
-      grunt.task.run(t);
-    };
-  };
-
-  // creates distributable version of library
-  grunt.registerTask('build', taskList([
-    'dev',
-    'uglify'
-  ]));
-
-  // default task useful during development
-  grunt.registerTask('default', taskList([
-    'dev',
-    'configureProxies:dev',
-    'connect:template',
-    'connect:example',
-    'watch'
-  ]));
-
-  // builds development version of library
-  grunt.registerTask('dev', taskList([
-    'clean',
+  grunt.registerTask('test', [
+    'clean:build',
     'browserify',
     'postcss:build',
-    'copy'
-  ]));
-
-  // starts distribution server and preview
-  grunt.registerTask('dist', taskList([
-    'build',
-    'postcss:dist',
-    'connect:dist'
-  ]));
-
-  // runs tests against development version of library
-  grunt.registerTask('test', taskList([
-    'dev',
+    'copy:build',
+    'copy:test',
+    'eslint:scripts',
+    'eslint:tests',
     'connect:test',
     'mocha_phantomjs'
-  ]));
+  ]);
+
+  grunt.registerTask('build', [
+    'clean:build',
+    'copy:invalidator',
+    'browserify',
+    'postcss:build',
+    'copy:build',
+    'copy:test',
+    'eslint:scripts',
+    'eslint:tests'
+  ]);
+
+  grunt.registerTask('eventadmin', function () {
+    try {
+      var fs = require('fs'),
+          stats = fs.lstatSync(gruntConfig.config.dist);
+      if (!stats.isDirectory()) {
+        throw new Error('dist is not a diretory');
+      }
+    } catch (e) {
+      // build if dist doesn't exist
+      grunt.task.run([
+        'build',
+        'clean:dist',
+        'copy:dist',
+        'postcss:dist',
+        'uglify'
+      ]);
+    }
+
+    grunt.task.run([
+      'connect:template',
+      'configureRewriteRules',
+      'configureProxies:dist',
+      'connect:dist'
+    ]);
+  });
+
+  grunt.registerTask('dist', [
+    'build',
+    'clean:dist',
+    'copy:dist',
+    'postcss:dist',
+    'uglify',
+    'connect:template',
+    'configureRewriteRules',
+    'configureProxies:dist',
+    'connect:dist'
+  ]);
+
+  grunt.registerTask('default', [
+    'build',
+    'configureRewriteRules',
+    'connect:template',
+    'configureProxies:dev',
+    'configureProxies:test',
+    'connect:dev',
+    'connect:test',
+    'mocha_phantomjs',
+    'watch'
+  ]);
+
 };

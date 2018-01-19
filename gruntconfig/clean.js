@@ -3,7 +3,10 @@
 var config = require('./config');
 
 var clean = {
-  build: ['.sass-cache', config.build],
+  build: [
+    config.build,
+    '.sass-cache'
+  ],
   dist: [config.dist]
 };
 

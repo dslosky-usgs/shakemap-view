@@ -1,17 +1,54 @@
 'use strict';
 
-var config = {
+
+var fs = require('fs');
+
+
+var config,
+    basePort,
+    packageJson;
+
+basePort = 9150;
+packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
+
+
+config = {
+  MOUNT_PATH: '/',
+  OFFSITE_HOST: 'earthquake.usgs.gov',
+  OFFSITE_PORT: [
+        '/archive/',
+        '/earthquakes/',
+        '/lib/leaflet-0.7.7/',
+        '/realtime/'
+  ],
+
   build: '.build',
-  buildPort: 8010,
+  buildPort: basePort,
   dist: 'dist',
-  distPort: 8012,
+  distPort: basePort + 1,
+  etc: 'etc',
   example: 'example',
-  examplePort: 8013,
-  livereloadPort: 8019,
+  examplePort: basePort + 2,
+  lib: 'lib',
+  packageJson: packageJson,
   src: 'src',
-  templatePort: 8014,
+  templatePort: basePort + 3,
   test: 'test',
-  testPort: 8011
+  testPort: basePort + 4,
+  liveReloadPort: basePort + 9,
+
+  cssPath: [
+    'src/htdocs/css',
+    'node_modules'
+  ],
+
+  jsPath: {
+    'src/htdocs/js': '*/*.js',
+
+    'node_modules/hazdev-webutils/src': '**/*.js'
+  }
+
 };
+
 
 module.exports = config;

@@ -2,18 +2,16 @@
 
 var config = require('./config');
 
-var corsMiddleware = function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', '*');
-  res.setHeader('Access-Control-Allow-Headers',
-      'accept,origin,authorization,content-type');
-  return next();
-};
+
+var MOUNT_PATH = config.MOUNT_PATH;
+var OFFSITE_HOST = config.OFFSITE_HOST;
+var OFFSITE_PATHS = config.OFFSITE_PATHS;
+
 
 var addMiddleware = function (connect, options, middlewares) {
   middlewares.unshift(
+    require('grunt-connect-rewrite/lib/utils').rewriteRequest,
     require('grunt-connect-proxy/lib/utils').proxyRequest,
-    corsMiddleware,
     require('gateway')(options.base[0], {
       '.php': 'php-cgi',
       'env': {
@@ -24,8 +22,8 @@ var addMiddleware = function (connect, options, middlewares) {
   return middlewares;
 };
 
-var connect = {
 
+var connect = {
   options: {
     hostname: '*'
   },
@@ -38,53 +36,75 @@ var connect = {
       rewrite: {
         '^/theme': ''
       }
+    },
+    {
+      context: OFFSITE_PATHS,
+      headers: {
+        'accept-encoding': 'identity',
+        host: OFFSITE_HOST
+      },
+      host: OFFSITE_HOST,
+      port: 80
     }
   ],
 
-  test: {
+  rules: [
+    {
+      from: '^' + MOUNT_PATH + '/(.*)$',
+      to: '/$1'
+    }
+  ],
+
+
+  dev: {
     options: {
       base: [
-        config.build + '/' + config.src,
-        config.build + '/' + config.test,
-        'node_modules'
+        config.build + '/' + config.src + '/htdocs'
       ],
-      open: 'http://localhost:' + config.testPort + '/test.html',
-      port: config.testPort
+      livereload: config.liveReloadPort,
+      middleware: addMiddleware,
+      open: 'http://localhost:' + config.buildPort +
+          MOUNT_PATH + '/index.php',
+      port: config.buildPort
     }
   },
 
   dist: {
     options: {
       base: [
-        config.example,
-        config.dist
+        config.dist + '/htdocs'
       ],
       keepalive: true,
-      open: 'http://localhost:' + config.distPort + '/example.php',
+      middleware: addMiddleware,
+      open: 'http://localhost:' + config.distPort +
+          MOUNT_PATH + '/index.php',
       port: config.distPort
-    }
-  },
-
-  example: {
-    options: {
-      base: [
-        config.example,
-        config.build + '/' + config.src
-      ],
-      livereload: config.livereloadPort,
-      open: 'http://localhost:' + config.examplePort + '/example.php',
-      port: config.examplePort,
-      middleware: addMiddleware
     }
   },
 
   template: {
     options: {
-      base: ['node_modules/hazdev-template/dist/htdocs'],
+      base: [
+        'node_modules/hazdev-template/dist/htdocs'
+      ],
+      middleware: addMiddleware,
       port: config.templatePort
     }
-  }
+  },
 
+  test: {
+    options: {
+      base: [
+        config.build + '/' + config.src + '/htdocs',
+        config.build + '/' + config.test,
+        config.etc,
+        'node_modules'
+      ],
+      open: 'http://localhost:' + config.testPort + '/test.html',
+      port: config.testPort
+    }
+  }
 };
+
 
 module.exports = connect;

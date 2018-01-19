@@ -3,39 +3,52 @@
 var config = require('./config');
 
 var watch = {
+  static: {
+    files: [
+      config.src + '/**/*',
+      '!' + config.src + '/**/*.js',
+      '!' + config.src + '/**/*.scss',
+      '!' + config.src + '/**/*.orig'
+    ],
+    tasks: [
+      'copy:build'
+    ]
+  },
   scripts: {
-    files: [
-      config.example + '/**/*.js',
-      config.src + '/**/*.js',
-      config.test + '/**/*.js'
-    ],
-    tasks: ['jshint:scripts', 'browserify', 'mocha_phantomjs']
-  },
-  scss: {
-    files: [
-      config.src + '/**/*.scss'
-    ],
-    tasks: ['postcss:build']
-  },
-  html: {
-    files: [
-      config.example + '/**/*.html',
-      config.test + '/**/*.html'
-    ],
-    tasks: ['copy:test']
-  },
-  reload: {
-    files: [
-      config.build + '/**/*',
-      config.example + '/**/*'
-    ],
+    files: [config.src + '/htdocs/**/*.js'],
+    tasks: ['browserify', 'eslint:scripts', 'mocha_phantomjs'],
     options: {
-      livereload: config.livereloadPort
+      livereload: config.liveReloadPort
     }
   },
+  scss: {
+    files: [config.src + '/htdocs/**/*.scss'],
+    tasks: ['postcss:build']
+  },
+  tests: {
+    files: [
+      config.test + '/*.html',
+      config.test + '/**/*.js'
+    ],
+    tasks: ['browserify:test', 'eslint:tests', 'mocha_phantomjs']
+  },
+  livereload: {
+    options: {
+      livereload: config.liveReloadPort
+    },
+    files: [
+      config.build + '/' + config.src + '/htdocs/**/*.php',
+      config.build + '/' + config.src + '/htdocs/img/**/*.{png,jpg,jpeg,gif}',
+      config.build + '/' + config.src + '/**/*.css',
+      config.build + '/' + config.src + '/' + config.lib + '/inc/**/*.php'
+    ]
+  },
   gruntfile: {
-    files: ['Gruntfile.js', 'gruntconfig/**/*.js'],
-    tasks: ['jshint:gruntfile']
+    files: [
+      'Gruntfile.js',
+      'gruntconfig/**/*.js'
+    ],
+    tasks: ['eslint:gruntfile']
   }
 };
 

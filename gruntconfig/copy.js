@@ -3,12 +3,52 @@
 var config = require('./config');
 
 var copy = {
+  build: {
+    expand: true,
+    cwd: config.src,
+    dest: config.build + '/' + config.src,
+    src: [
+      '**/*',
+      '!**/*.js',
+      '!**/*.scss',
+      '!**/*.orig'
+    ],
+    filter: 'isFile'
+  },
+
   test: {
     expand: true,
     cwd: config.test,
-    src: ['**/*.html', '**/*.xml', 'jsonp.js'],
-    dest: config.build + '/' + config.test
+    dest: config.build + '/' + config.test,
+    src: [
+      '**/*',
+      '!**/*.js'
+    ],
+    filter: 'isFile'
+  },
+
+  dist: {
+    expand: true,
+    cwd: config.build + '/' + config.src,
+    dest: config.dist,
+    src: [
+      '**/*',
+      '!**/*.js',
+      '!**/*.css'
+    ],
+    filter: 'isFile'
+  },
+
+  invalidator: {
+    expand: true,
+    cwd: 'node_modules/hazdev-cache-invalidator/src',
+    dest: config.build + '/' + config.src,
+    src: [
+      'lib/classes/CacheInvalidator.php',
+      'htdocs/invalidate_url.php'
+    ]
   }
+
 };
 
 module.exports = copy;

@@ -2,19 +2,22 @@
 
 var config = require('./config');
 
-var jshint = {
+
+var eslint = {
   options: {
-    jshintrc: '.jshintrc'
+    config: '.eslintrc.json'
   },
   gruntfile: [
     'Gruntfile.js',
     'gruntconfig/**/*.js'
   ],
   scripts: [
-    config.example + '/**/*.js',
-    config.src + '/**/*.js',
+    config.src + '/htdocs/**/*.js'
+  ],
+  tests: [
     config.test + '/**/*.js'
   ]
 };
 
-module.exports = jshint;
+
+module.exports = eslint;

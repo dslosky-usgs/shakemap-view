@@ -1,12 +1,29 @@
 'use strict';
 
+
 var config = require('./config');
 
+
 var uglify = {
+
+  options: {
+    mangle: true,
+    compress: {},
+    report: 'gzip'
+  },
+
   dist: {
-    src: config.build + '/' + config.src + '/hazdev-webutils.js',
-    dest: config.dist + '/hazdev-webutils.js'
+    files: [{
+      expand: true,
+      cwd: config.build + '/' + config.src,
+      src: [
+        '**/*.js',
+        '!**/bundle.js'
+      ],
+      dest: config.dist
+    }]
   }
 };
+
 
 module.exports = uglify;

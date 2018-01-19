@@ -2,32 +2,56 @@
 
 var autoprefixer = require('autoprefixer'),
     cssnano = require('cssnano'),
+    calc = require('postcss-calc'),
+    postcssImport = require('postcss-import'),
     precss = require('precss');
 
+
 var config = require('./config');
+
 
 var postcss = {
 
   build: {
     options: {
+      map: true,
       processors: [
+        postcssImport({
+          path: config.cssPath
+        }),
         precss(),
-        autoprefixer({'browsers': 'last 2 versions'}) // vendor prefix as needed
+        calc(),
+        autoprefixer({'browsers': 'last 4 versions'})
       ]
     },
-    src: config.src + '/hazdev-webutils.scss',
-    dest: config.build + '/' + config.src + '/hazdev-webutils.css'
+    cwd: config.src + '/htdocs',
+    dest: config.build + '/' + config.src + '/htdocs',
+    expand: true,
+    ext: '.css',
+    extDot: 'last',
+    src: [
+      'css/*.scss',
+      '!css/_*.scss'
+    ]
   },
 
   dist: {
     options: {
       processors: [
-        cssnano({zindex: false}) // minify
+        cssnano({
+          autoprefixer: false,
+          zindex: false
+        })
       ]
     },
-    src: config.build + '/' + config.src + '/hazdev-webutils.css',
-    dest: config.dist + '/hazdev-webutils.css'
+    cwd: config.build + '/' + config.src + '/htdocs',
+    dest: config.dist + '/htdocs',
+    expand: true,
+    src: [
+      '**/*.css'
+    ]
   }
+
 };
 
 module.exports = postcss;
