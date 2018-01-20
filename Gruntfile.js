@@ -26,7 +26,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:build',
-    'copy:invalidator',
+    'copy:leaflet',
     'browserify',
     'postcss:build',
     'copy:build',
@@ -34,32 +34,6 @@ module.exports = function (grunt) {
     'eslint:scripts',
     'eslint:tests'
   ]);
-
-  grunt.registerTask('eventadmin', function () {
-    try {
-      var fs = require('fs'),
-          stats = fs.lstatSync(gruntConfig.config.dist);
-      if (!stats.isDirectory()) {
-        throw new Error('dist is not a diretory');
-      }
-    } catch (e) {
-      // build if dist doesn't exist
-      grunt.task.run([
-        'build',
-        'clean:dist',
-        'copy:dist',
-        'postcss:dist',
-        'uglify'
-      ]);
-    }
-
-    grunt.task.run([
-      'connect:template',
-      'configureRewriteRules',
-      'configureProxies:dist',
-      'connect:dist'
-    ]);
-  });
 
   grunt.registerTask('dist', [
     'build',

@@ -13,13 +13,12 @@ packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 
 
 config = {
-  MOUNT_PATH: '/',
+  MOUNT_PATH: '',
   OFFSITE_HOST: 'earthquake.usgs.gov',
-  OFFSITE_PORT: [
-        '/archive/',
-        '/earthquakes/',
-        '/lib/leaflet-0.7.7/',
-        '/realtime/'
+  OFFSITE_PATHS: [
+    '/archive/',
+    '/earthquakes/',
+    '/realtime/'
   ],
 
   build: '.build',
