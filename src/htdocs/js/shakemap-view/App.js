@@ -7,9 +7,7 @@ var App = function (options) {
     var _this,
         _initialize;
 
-    options = Util.extend({}, {
-        headerUrl: 'HeaderInputData.json'
-    }, options);
+    options = Util.extend({}, {}, options);
     _this = View(options);
 
     _initialize = function (options) {
@@ -24,36 +22,6 @@ var App = function (options) {
             model: _this.model
         });
         
-    };
-
-    _this.destroy = Util.compose(_this.destroy, function () {
-        _this.headerInputView.off();
-    });
-
-    _this.loadData = function () {
-        _this.el.classList.add('loading');
-
-        Xhr.ajax({
-            url: _this.headerUrl,
-            success: function (json) {
-                _this.model.set({
-                    header: json.header
-                });
-            },
-            error: function () {
-                _this.model.set({
-                    header: 'Error loading header'
-                });
-            },
-            done: function () {
-                _this.el.classList.remove('loading');
-            }
-        });
-    };
-
-    _this.onHeaderInputViewOtherButtonClick = function (e) {
-        console.log('other button clicked');
-        console.log(e);
     };
 
     _initialize(options);

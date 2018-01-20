@@ -14,7 +14,7 @@ var MapView = function (options) {
     _this = View(options);
 
     _initialize = function (/*options*/ ) {
-        _this.el.innerHTML = '<div class="map" style="height:200px;width:200px"></div>'
+        _this.el.innerHTML = '<div class="map" style="height:100%;width:100%"></div>'
         
         let mapEl = _this.el.querySelector('.map');
 
