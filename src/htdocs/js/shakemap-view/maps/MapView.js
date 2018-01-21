@@ -6,6 +6,8 @@ const Model = require('hazdev-webutils/src/mvc/Model'),
 	Util = require('hazdev-webutils/src/util/Util'),
 	Xhr = require('hazdev-webutils/src/util/Xhr');
 
+const epicLayer = require('shakemap-view/maps/layers/epicenter');
+
 
 var MapView = function (options) {
     var _this,
@@ -28,9 +30,8 @@ var MapView = function (options) {
             id: 'mapbox.streets'
         }).addTo(_this.map);
 
-        L.marker([51.5, -0.09]).addTo(_this.map)
-            .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-            .openPopup();
+        var layer = epicLayer.generateLayer('us200078i');
+        L.control.layers({'Epicenter': layer}).addTo(_this.map);
     };
 
 
