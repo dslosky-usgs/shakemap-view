@@ -1,6 +1,7 @@
 'use strict';
 
-var layers = [require('shakemap-view/maps/layers/epicenter')];
+var layers = [require('shakemap-view/maps/layers/epicenter'),
+                require('shakemap-view/maps/layers/cont_mmi')];
 
 var generate = function (productID) {
     var leafLayers = {};
