@@ -8,7 +8,7 @@ var  genLayers = require('shakemap-view/maps/layers/generate');
 
 var MapView = function (options) {
     var _this,
-        _initialize;
+            _initialize;
 
     _this = View(options);
 

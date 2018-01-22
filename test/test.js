@@ -8,7 +8,7 @@ mocha.setup('bdd');
 require('./spec/TestTest.js');
 
 if (window.mochaPhantomJS) {
-  window.mochaPhantomJS.run();
+    window.mochaPhantomJS.run();
 } else {
-  mocha.run();
+    mocha.run();
 }
