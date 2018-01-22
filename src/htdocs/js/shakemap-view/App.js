@@ -1,4 +1,5 @@
-const LoadingView = require('shakemap-view/loading/LoadingView'),
+const EventsView = require('shakemap-view/events/EventsView'),
+        LoadingView = require('shakemap-view/loading/LoadingView'),
         MapView = require('shakemap-view/maps/MapView'),
         View = require('hazdev-webutils/src/mvc/View'),
         Util = require('hazdev-webutils/src/util/Util');
@@ -14,11 +15,17 @@ var App = function (options) {
         _this.el.classList.add('sm-view-app');
 
         _this.el.innerHTML =
-                '<div class="loading">Loading...</div>' +
+                '<div class="loading"></div>' +
+                '<div class="events"></div>' +
                 '<div class="map-view" style="height:100%;width:100%;position:relative;"></div>';
 
         _this.mapView = MapView({
             el: _this.el.querySelector('.map-view'),
+            model: _this.model
+        });
+
+        _this.eventsView = EventsView({
+            el: _this.el.querySelector('.events'),
             model: _this.model
         });
         
