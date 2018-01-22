@@ -2,7 +2,6 @@
 'use strict';
 
 var layer = {};
-
 layer.generateLayer = function (productID) {
     var ml = L.layerGroup();
     L.marker([51.5, -0.09]).addTo(ml)
@@ -11,5 +10,7 @@ layer.generateLayer = function (productID) {
 
     return ml;
 };
+
+layer.name = 'Epicenter';
 
 module.exports = layer;

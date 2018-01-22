@@ -1,7 +1,6 @@
 const MapView = require('shakemap-view/maps/MapView'),
         View = require('hazdev-webutils/src/mvc/View'),
-		Util = require('hazdev-webutils/src/util/Util'),
-		Xhr = require('hazdev-webutils/src/util/Xhr');
+		Util = require('hazdev-webutils/src/util/Util');
 
 var App = function (options) {
     var _this,
@@ -10,7 +9,7 @@ var App = function (options) {
     options = Util.extend({}, {}, options);
     _this = View(options);
 
-    _initialize = function (options) {
+    _initialize = function (/*options*/) {
         _this.el.classList.add('sm-view-app');
 
         _this.el.innerHTML =
