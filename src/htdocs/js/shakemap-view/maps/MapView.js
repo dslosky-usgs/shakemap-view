@@ -17,7 +17,9 @@ var MapView = function (options) {
         
         let mapEl = _this.el.querySelector('.map');
 
-        _this.map = L.map(mapEl).setView([51.505, -0.09], 13);
+        _this.map = L.map(mapEl, {
+            scrollWheelZoom: false
+        }).setView([51.505, -0.09], 13);
 
         var baseLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + 'pk.eyJ1IjoiZHNsb3NreSIsImEiOiJjaXR1aHJnY3EwMDFoMnRxZWVtcm9laWJmIn0.1C3GE0kHPGOpbVV9kTxBlQ', {
             maxZoom: 18,

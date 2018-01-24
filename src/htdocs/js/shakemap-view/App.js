@@ -15,7 +15,7 @@ var App = function (options) {
         _this.el.classList.add('sm-view-app');
 
         _this.el.innerHTML =
-                '<div class="loading"></div>' +
+                '<div class="loading-view"></div>' +
                 '<div class="events"></div>' +
                 '<div class="map-view" style="height:100%;width:100%;position:relative;"></div>';
 
@@ -30,7 +30,7 @@ var App = function (options) {
         });
         
         _this.loadingView = LoadingView({
-            el: _this.el.querySelector('.loading'),
+            el: _this.el.querySelector('.loading-view'),
             model: _this.model
         });
     };
