@@ -7,6 +7,8 @@ var ShakeMapModel = function(options) {
     _this = Model(Util.extend({},
         {productsUrl: '/products.json',
             events: [],
+            event: null,
+            defaultLayers: ['Epicenter'],
             loading: false},
 			options));
 

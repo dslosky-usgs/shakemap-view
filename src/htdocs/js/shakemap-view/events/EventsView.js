@@ -34,8 +34,12 @@ var EventView = function (options) {
         _this.loadButton = _this.el.querySelector('.loadButton');
         _this.loadButton.addEventListener('click', _this.getEvents);
 
-        _this.events = _this.el.querySelector('.event');
-        _this.events.addEventListener('click', _this.loadEvent);
+        _this.events = _this.el.querySelectorAll('.event');
+        if (_this.events) {
+            for (let event of _this.events) {
+                event.addEventListener('click', _this.loadEvent);
+            }
+        }
     };
 
     _this.getEvents = function () {
@@ -47,7 +51,7 @@ var EventView = function (options) {
             url: _this.model.get('productsUrl'),
             success: function (json) {
                 _this.model.set({
-                    events: json.features
+                    events: JSON.parse(json)
                 });
             },
             error: function () {
@@ -64,8 +68,23 @@ var EventView = function (options) {
     };
     
     _this.loadEvent = function (e) {
-        window.Event = e;
-    }
+        var eventDiv = e.toElement;
+        var eventId = eventDiv.innerText;
+
+        var eventData = null;
+        for (let eventJson of _this.model.get('events')) {
+            if (eventJson['id'] === eventId) {
+                eventData = eventJson;
+                break;
+            }
+        }
+
+        if (eventData) {
+            _this.model.set({
+                'event': eventData
+            });
+        }
+    };
 
     _initialize(options);
     options = null;
