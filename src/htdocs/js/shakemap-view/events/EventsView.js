@@ -33,6 +33,9 @@ var EventView = function (options) {
         
         _this.loadButton = _this.el.querySelector('.loadButton');
         _this.loadButton.addEventListener('click', _this.getEvents);
+
+        _this.events = _this.el.querySelector('.event');
+        _this.events.addEventListener('click', _this.loadEvent);
     };
 
     _this.getEvents = function () {
@@ -41,7 +44,7 @@ var EventView = function (options) {
         });
 
         Xhr.ajax({
-            url: _this.model.get('eventUrl'),
+            url: _this.model.get('productsUrl'),
             success: function (json) {
                 _this.model.set({
                     events: json.features
@@ -59,8 +62,10 @@ var EventView = function (options) {
             }
         });
     };
-
-
+    
+    _this.loadEvent = function (e) {
+        window.Event = e;
+    }
 
     _initialize(options);
     options = null;
