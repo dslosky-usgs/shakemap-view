@@ -8,7 +8,8 @@ var ShakeMapModel = function(options) {
         {productsUrl: '/products.json',
             events: [],
             event: null,
-            defaultLayers: ['Epicenter'],
+            layers: [],
+            defaultLayers: ['Epicenter', 'PGA Contours'],
             loading: false},
 			options));
 

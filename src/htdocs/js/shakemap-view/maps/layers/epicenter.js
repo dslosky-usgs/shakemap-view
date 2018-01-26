@@ -2,10 +2,10 @@
 'use strict';
 
 var layer = {};
-layer.generateLayer = function (productID) {
+layer.generateLayer = function (event) {
     var ml = L.layerGroup();
     L.marker([51.5, -0.09]).addTo(ml)
-            .bindPopup(productID)
+            .bindPopup(event.id)
             .openPopup();
 
     return ml;
