@@ -20,6 +20,7 @@ var MapView = function (options) {
             scrollWheelZoom: false
         }).setView([51.505, -0.09], 13);
 
+        _this.layerGenerator = Generator(options);
         _this.baseLayer = _this.genBaseLayer();
         _this.layersControl = L.control.layers({'Basemap': _this.baseLayer}).addTo(_this.map);
 
@@ -40,16 +41,15 @@ var MapView = function (options) {
         return baselayer;
     };
 
-    _this.renderEventLayers = function (options) {
+    _this.renderEventLayers = function () {
         // clear map
         _this.clearMapLayers();
         
         // generate new layers
         _this.baseLayer = _this.genBaseLayer();
         var event = _this.model.get('event');
-        var g = Generator(options);
-        g.generateLayers(event);
-
+        
+        _this.layerGenerator.generateLayers(event);
         _this.layersControl = L.control.layers({'Basemap': _this.baseLayer}).addTo(_this.map);
     };
 

@@ -5,8 +5,8 @@ const events = require('shakemap-view/maps/layers/events');
 
 var layer = {id: 'download/cont_pga.json'};
 layer.name = 'PGA Contours';
-layer.layer = null;
 layer.generateLayer = function (event) {
+    layer.layer = null;
     var product = null;
     var contents = event.shakemap[0].contents;
 
@@ -17,7 +17,6 @@ layer.generateLayer = function (event) {
         }
     }
 
-    var jsonLayer = null;
     if (product) {
         Xhr.ajax({
             url: product.url,
@@ -31,9 +30,9 @@ layer.generateLayer = function (event) {
             done: function () {
             }
         });
+    } else {
+        events.layerFinishedEvent(layer);
     }
-    
-    return jsonLayer;
 };
 
 
