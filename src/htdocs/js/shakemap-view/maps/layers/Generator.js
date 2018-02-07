@@ -31,10 +31,13 @@ var Generator = function (options) {
 
     _this.addLayer = function (e) {
         var layer = e.detail;
+
+        // collect layers that rendered successfully
         if (layer.layer) {
             _this.layers[layer.name] = layer.layer;
         }
 
+        // Keep track of all layers that have returned
         _this.layerCount += 1;
 
         // set the model if all the layers are ready

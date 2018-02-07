@@ -51,7 +51,7 @@ var EventView = function (options) {
             url: _this.model.get('productsUrl'),
             success: function (json) {
                 _this.model.set({
-                    events: JSON.parse(json)
+                    events: json
                 });
             },
             error: function () {

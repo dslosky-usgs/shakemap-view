@@ -3,13 +3,13 @@
 const events = require('shakemap-view/maps/layers/events'),
         Xhr = require('util/Xhr');
 
-var layer = {id: 'download/grid.xml'};
+var layer = {productId: 'download/grid.xml'};
 layer.generateLayer = function (event) {
     var product = null;
     var contents = event.shakemap[0].contents;
 
     for (let p in contents) {
-        if (p === layer.id) {
+        if (p === layer.productId) {
             product = contents[p];
             break;
         }

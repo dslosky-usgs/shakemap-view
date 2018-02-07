@@ -3,3 +3,4 @@
 .sass-cache
 dist
 node_modules
+docs
